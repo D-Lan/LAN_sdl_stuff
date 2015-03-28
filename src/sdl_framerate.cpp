@@ -1,6 +1,6 @@
 
 
-#include"SDL/SDL.h"
+#include<SDL/SDL.h>
 #include"sdl_framerate.h"
 
 

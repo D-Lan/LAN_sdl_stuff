@@ -1,8 +1,14 @@
 
+#define DEBUG
+
+
 #include <cstdio>
-#include "SDL/SDL.h"
+#include<SDL/SDL.h>
+
 
 #include"sdl_framerate.h"
+#include"lan_logging.h"
+
 
 #include"ui_loadanim.h"
 #include"ui_numberbar.h"
@@ -22,22 +28,21 @@ SDL_Event event;
 // Clean up SDL
 void clean_up()
 {
-	printf("\nStopping SDL\n");
+	log("Stopping SDL\n");
 	SDL_Quit(); // Stop SDL
 
 }
 
 
-
-
-
 bool init()
 {
+
+    log("Initalizing SDL subsytem\n");
 
 	// Initialize SDL subsystems
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
-        printf( "\nUnable to init SDL: %s\n", SDL_GetError() );
+        log( "\nUnable to init SDL: %s\n", SDL_GetError() );
         return false;
     }
 
@@ -46,25 +51,25 @@ bool init()
 
 	if( !screen )
 	{
-		printf("\nUnable to set 320x240 video: %s\n", SDL_GetError());
+		log("\nUnable to set 320x240 video: %s\n", SDL_GetError());
 		return false;
 	}
 
 	// Make sure SDL cleans up before exit
-    atexit(clean_up);
+    //atexit(clean_up);
 	return true;
 }
 
+//int argc, char *argv[]
 
 
-
-int main(  int argc, char *argv[] ) {
+int main(   ) {
 
 
 
 	if ( init() == false )
 	{
-		printf("Error initializing SDL");
+		log("Error initializing SDL");
 		return 1;
 	}
 
@@ -75,7 +80,7 @@ int main(  int argc, char *argv[] ) {
     NumberBars nb(screen, 11, numbers);
 
 
-	//LoadAnim loada(screen);
+	LoadAnim loada(screen);
 
 
 
@@ -117,8 +122,9 @@ int main(  int argc, char *argv[] ) {
 
 		// draw background
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,20, 255));
-        //loada.draw();
+        loada.draw();
         nb.draw();
+
 
         // DRAWING ENDS HERE
         SDL_Flip(screen);
@@ -128,6 +134,6 @@ int main(  int argc, char *argv[] ) {
 
     // all is well
 	clean_up();
-	printf("Sort exited cleanly\n");
+	log("Sort exited cleanly\n");
     return 0;
 }

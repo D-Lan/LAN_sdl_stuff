@@ -2,7 +2,7 @@
 
 
 
-#include"SDL/SDL.H"
+#include<SDL/SDL.h>
 #include"ui_loadanim.h"
 
 

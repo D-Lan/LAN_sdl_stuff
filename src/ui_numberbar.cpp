@@ -1,22 +1,24 @@
 
 
-#include<SDL/SDL.H>
+#include<SDL/SDL.h>
+
 #include"ui_numberbar.h"
 
+#include <lan_logging.h>
 
 NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumbers)
 {
 
 	// SDL screen
 	screen = newScreen;
-	
-	
+
+
 	// Colors
 	color_default = SDL_MapRGB(screen->format, 220, 220, 220);
 	color_alternate = SDL_MapRGB(screen->format, 210, 210, 210);
 	color_primary = SDL_MapRGB(screen->format, 120, 120, 120);
 	color_secondary = SDL_MapRGB(screen->format, 50, 50, 50);
-	
+
 	// Numbers
 	numbers = newNumbers;
 	amount = newTotalNumbers;
@@ -29,35 +31,35 @@ NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumb
 		if (min > numbers[i]) { min = numbers[i]; }
 		if (max < numbers[i]) { max = numbers[i]; }
 	}
-	
-	
+
+
 	// Selection
 	select_primary = amount-1;
 	select_secondary = 0;
-	
-	
+
+
 	// Bar stuff
 	max_height = 300;
 	bar_width = 2;
 	scroll = 0;
-	
+
 	getInitBarWidth();
 }
 
 
 void NumberBars::dummy_draw()
 {
-	
-	printf("\n\n\n%i Numbers:\n", amount);
-	
+
+	log("\n\n\n%i Numbers:\n", amount);
+
 	for (int i=0; i<amount; i++)
 	{
 		printf("%i\n", numbers[i]);
 	}
-	printf("\nMax: %i\nMin: %i\n", max, min);
-	printf("Primary: %i\n\n", select_primary);
-	printf("Secondary: %i\n\n\n\n", select_secondary);
-} 
+	log("\nMax: %i\nMin: %i\n", max, min);
+	log("Primary: %i\n\n", select_primary);
+	log("Secondary: %i\n\n\n\n", select_secondary);
+}
 
 
 
@@ -89,8 +91,8 @@ bool NumberBars::selectSecondary(int newSelect)
 
 void NumberBars::getInitBarWidth()
 {
-	
-	if (amount<=(screen->w)/4) 			// If less than 80 
+
+	if (amount<=(screen->w)/4) 			// If less than 80
 	{									// Fit bars to the screen
 		bar_width = screen->w/amount;
 		on_screen = amount;
@@ -98,8 +100,9 @@ void NumberBars::getInitBarWidth()
 		bar_width = 4;
 		on_screen = screen->w/4;
 	}
-	printf("\nBar width: %i\n", bar_width);
-	printf("\nOn screen: %i\n", on_screen);
+
+	log("Bar width: %i\n", bar_width);
+	log("On screen: %i\n", on_screen);
 }
 
 
@@ -110,11 +113,11 @@ void NumberBars::draw()
 	bar.w = bar_width;
 	for (int i=0; i<on_screen; i++)
 	{
-		
+
 		bar.h = (200*numbers[i])/max;
 		bar.x = bar_width*i;
 		bar.y = (screen->h) - (bar.h);
-		
+
 		if (!(i%2))
 		{
 			SDL_FillRect(screen, &bar, color_default);
@@ -122,8 +125,8 @@ void NumberBars::draw()
 			SDL_FillRect(screen, &bar, color_alternate);
 		}
 	}
-	
-	
+
+
 }
 
 
