@@ -10,7 +10,7 @@
 #include"lan_logging.h"
 
 
-#include"ui_loadanim.h"
+//#include"ui_loadanim.h"
 #include"ui_numberbar.h"
 
 
@@ -63,7 +63,7 @@ bool init()
 //int argc, char *argv[]
 
 
-int main(   ) {
+int main( int argc, char *argv[]  ) {
 
 
 
@@ -80,7 +80,7 @@ int main(   ) {
     NumberBars nb(screen, 11, numbers);
 
 
-	LoadAnim loada(screen);
+	//LoadAnim loada(screen);
 
 
 
@@ -122,7 +122,7 @@ int main(   ) {
 
 		// draw background
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,20, 255));
-        loada.draw();
+        //loada.draw();
         nb.draw();
 
 

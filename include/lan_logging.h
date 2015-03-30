@@ -3,13 +3,14 @@
 #ifndef LAN_LOGGING_H
 #define LAN_LOGGING_H
 
-#include <cstdio>
+
 
 
 #   ifdef DEBUG
+        #include <cstdio>
         static int (*log)(const char*, ...) = printf;
 #   else
-        static inline int log(...) { }
+        static inline void log(...) { }
 #   endif
 
 
