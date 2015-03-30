@@ -6,6 +6,10 @@
 
 #include <lan_logging.h>
 
+
+
+// Constructor //
+
 NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumbers)
 {
 
@@ -14,10 +18,10 @@ NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumb
 
 
 	// Colors
-	color_default = SDL_MapRGB(screen->format, 220, 220, 220);
+	color_default = SDL_MapRGB(screen->format, 240, 240, 240);
 	color_alternate = SDL_MapRGB(screen->format, 210, 210, 210);
-	color_primary = SDL_MapRGB(screen->format, 120, 120, 120);
-	color_secondary = SDL_MapRGB(screen->format, 50, 50, 50);
+	color_primary = SDL_MapRGB(screen->format, 255, 0, 0);
+	color_secondary = SDL_MapRGB(screen->format, 0, 255, 0);
 
 
 	// Numbers
@@ -41,7 +45,7 @@ NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumb
 
 
 	// Bar stuff
-	max_height = 300;
+	max_height = screen->h-32;
 	bar_width = 2;
 	scroll = 0;
 	offset = 0;
@@ -51,49 +55,47 @@ NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumb
 }
 
 
-void NumberBars::dummy_draw()
-{
 
-	log("\n\n\n%i Numbers:\n", amount);
-
-	for (int i=0; i<amount; i++)
-	{
-		printf("%i\n", numbers[i]);
-	}
-	log("\nMax: %i\nMin: %i\n", max, min);
-	log("Primary: %i\n\n", select_primary);
-	log("Secondary: %i\n\n\n\n", select_secondary);
-}
-
-
-
-// Selection methods
+// Selection methods //
 
 bool NumberBars::selectPrimary(int newSelect)
 {
 	if (newSelect>=0 && newSelect<amount)
 	{
-		select_primary=newSelect;
+		select_primary = newSelect;
 		return true;
-	} else {
+	}
+ else {
+	 return false;
+ }
+}
+
+
+bool NumberBars::selectSecondary(int newSelect)
+{
+	if (newSelect >= 0 && newSelect < amount)
+	{
+		select_secondary = newSelect;
+		return true;
+	}
+	else {
 		return false;
 	}
 }
-
 
 
 bool NumberBars::incrementPrimary()
 {
-	if (select_primary < amount-1)
+	if (select_primary < amount - 1)
 	{
 		select_primary++;
 		return true;
-	} else
+	}
+	else
 	{
 		return false;
 	}
 }
-
 
 
 bool NumberBars::decrementPrimary()
@@ -110,7 +112,6 @@ bool NumberBars::decrementPrimary()
 }
 
 
-
 bool NumberBars::incrementSecondary()
 {
 	if (select_secondary < amount - 1)
@@ -123,7 +124,6 @@ bool NumberBars::incrementSecondary()
 		return false;
 	}
 }
-
 
 
 bool NumberBars::decrementSecondary()
@@ -141,20 +141,70 @@ bool NumberBars::decrementSecondary()
 
 
 
-bool NumberBars::selectSecondary(int newSelect)
+// View methods //
+
+void NumberBars::scrollRight()
 {
-	if (newSelect>=0 && newSelect<amount)
+	if (amount >= on_screen && scroll + on_screen < amount)
 	{
-		select_secondary=newSelect;
-		return true;
-	} else {
-		return false;
+		scroll++;
 	}
 }
 
 
+void NumberBars::scrollLeft()
+{
+	if (scroll > 0)
+	{
+		scroll--;
+	}
+}
 
-// Bar methods
+
+void NumberBars::scrollRight(int move)
+{
+	if (amount >= on_screen)
+	{
+		if (scroll + on_screen + move < amount)
+		{
+			scroll += move;
+		}
+		else
+		{
+			scroll = amount-on_screen;
+		}
+	}
+}
+
+
+void NumberBars::scrollLeft(int move)
+{
+	if (amount > on_screen)
+	{
+		if (scroll - move > 0)
+		{
+			scroll -= move;
+		}
+		else
+		{
+			scroll = 0;
+		}
+	}
+}
+
+
+void NumberBars::zoomIn()
+{
+	on_screen++;
+}
+
+
+void NumberBars::zoomOut()
+{
+	on_screen--;
+}
+
+// Bar methods //
 
 bool NumberBars::fitToScreen()
 {
@@ -172,11 +222,6 @@ bool NumberBars::fitToScreen()
 		return false;
 	}
 }
-
-
-
-
-
 
 
 void NumberBars::getInitBarWidth()
@@ -197,22 +242,48 @@ void NumberBars::getInitBarWidth()
 
 
 
+// Drawing Methods //
+
 void NumberBars::draw()
 {
 
 	bar.w = bar_width;
-	for (int i=0; i<on_screen; i++)
+	for (int i = 0; i < on_screen; i++)
 	{
 
-		bar.h = (200*numbers[i])/max;
-		bar.x = (bar_width*i)+offset;
+		bar.h = (200 * numbers[i+scroll]) / max;
+		bar.x = (bar_width*i) + offset;
 		bar.y = (screen->h) - (bar.h);
 
-		if (!(i%2))
+		if (select_primary == i+scroll)			
 		{
-			SDL_FillRect(screen, &bar, color_default);
-		} else {
-			SDL_FillRect(screen, &bar, color_alternate);
+			SDL_FillRect(screen, &bar, color_primary);		// If current bar is selected as primary
+		}
+		else if (select_secondary == i + scroll)
+		{
+			SDL_FillRect(screen, &bar, color_secondary);	// If current bar is selected as secodary
+		}
+		else if (!((i+scroll) % 2))
+		{
+			SDL_FillRect(screen, &bar, color_default);		// If i is even (Makes an alternating color pattern)
+		}
+		else
+		{
+			SDL_FillRect(screen, &bar, color_alternate);	// If i is odd
 		}
 	}
+}
+
+void NumberBars::dummy_draw()
+{
+
+	log("\n\n\n%i Numbers:\n", amount);
+
+	for (int i=0; i<amount; i++)
+	{
+		printf("%i\n", numbers[i]);
+	}
+	log("\nMax: %i\nMin: %i\n", max, min);
+	log("Primary: %i\n\n", select_primary);
+	log("Secondary: %i\n\n\n\n", select_secondary);
 }

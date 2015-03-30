@@ -38,32 +38,38 @@ class NumberBars
 
 		// Bar stuff
 		SDL_Rect bar;					// Rect for drawing bars
-		int max_height;					//
-		int bar_width;					//
-		//int zoom;						//
-		//int left;						// Lowest array item shown
-		//int right;					// Highest array item shown
+		int max_height;					// Height in pixels the bars can be
+		int bar_width;					// The width of each bar
 		int scroll;						// Amount of offset to the right in bars
 		int offset;						// Amount to offsent in pixels
 		int on_screen;					// Amount of bars on screen
 
 
 		// Bar methods
-		void getInitBarWidth();			// Set initial bar width
+		
 		bool fitToScreen();				// Fit the bars to the screen
 
 
 		public:
-
+			void getInitBarWidth();			// Set initial bar width
 			// Construction
 			NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumbers);
 
 			// Bar stuff
+			void scrollLeft();
+			void scrollRight();
+			void scrollLeft(int move);
+			void scrollRight(int move);
 
+
+			void zoomIn();
+			void zoomOut();
+			void zoomIn(int move);
+			void zoomOut(int move);
 
 
 			// SDL stuff
-			void draw();
+			void draw();		// Draws bars on SDL surface
 			void dummy_draw();	// Output values to console
 
 

@@ -45,13 +45,15 @@ bool init()
     }
 
 	// Set up the screen
-	screen = SDL_SetVideoMode(320, 240, 8, SDL_SWSURFACE);
+	screen = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE);
 
 	if( !screen )
 	{
 		log("\nUnable to set 320x240 video: %s\n", SDL_GetError());
 		return false;
 	}
+
+	SDL_WM_SetCaption("Sort Test", NULL);
 
 	// Make sure SDL cleans up before exit
     //atexit(clean_up);
@@ -77,12 +79,12 @@ int main(int argc, char *argv[])
 
 	//int numbers[] = { 1, 4, 6, 3, 5, 15,};
 
-	const int numbers_amount = 81;
+	const int numbers_amount = 101;
 	int numbers[numbers_amount];
 
 	for (int i = 0; i < numbers_amount; i++)
 	{
-		numbers[i] = i + 1;
+		numbers[i] = rand() % 100 + 1;
 	}
 
 
@@ -119,6 +121,12 @@ int main(int argc, char *argv[])
 						{
 							case SDLK_ESCAPE: done=true;
 							case SDLK_SPACE: done=true;
+							case SDLK_RIGHT: nb.scrollRight(5); break;
+							case SDLK_LEFT: nb.scrollLeft(5); break;
+							case SDLK_UP: nb.zoomIn(); break;
+							case SDLK_DOWN: nb.zoomOut(); break;
+
+							//case SDL_VIDEORESIZE: nb.getInitBarWidth(); break;
 							default: break;
 						}
 
