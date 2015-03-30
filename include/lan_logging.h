@@ -1,4 +1,5 @@
 
+#define DEBUG
 
 #ifndef LAN_LOGGING_H
 #define LAN_LOGGING_H

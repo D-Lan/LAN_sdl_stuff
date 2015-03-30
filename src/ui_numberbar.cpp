@@ -19,11 +19,13 @@ NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumb
 	color_primary = SDL_MapRGB(screen->format, 120, 120, 120);
 	color_secondary = SDL_MapRGB(screen->format, 50, 50, 50);
 
+
 	// Numbers
 	numbers = newNumbers;
 	amount = newTotalNumbers;
 	max = numbers[0];
 	min = numbers[0];
+
 
 	// Get max and min
 	for (int i=1; i<amount; i++)
@@ -42,8 +44,10 @@ NumberBars::NumberBars(SDL_Surface* newScreen, int newTotalNumbers, int *newNumb
 	max_height = 300;
 	bar_width = 2;
 	scroll = 0;
-
+	offset = 0;
 	getInitBarWidth();
+
+
 }
 
 
@@ -63,6 +67,7 @@ void NumberBars::dummy_draw()
 
 
 
+// Selection methods
 
 bool NumberBars::selectPrimary(int newSelect)
 {
@@ -74,6 +79,67 @@ bool NumberBars::selectPrimary(int newSelect)
 		return false;
 	}
 }
+
+
+
+bool NumberBars::incrementPrimary()
+{
+	if (select_primary < amount-1)
+	{
+		select_primary++;
+		return true;
+	} else
+	{
+		return false;
+	}
+}
+
+
+
+bool NumberBars::decrementPrimary()
+{
+	if (select_primary > 0)
+	{
+		select_primary--;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+
+bool NumberBars::incrementSecondary()
+{
+	if (select_secondary < amount - 1)
+	{
+		select_secondary++;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+
+bool NumberBars::decrementSecondary()
+{
+	if (select_secondary > 0)
+	{
+		select_secondary--;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
 
 bool NumberBars::selectSecondary(int newSelect)
 {
@@ -88,21 +154,45 @@ bool NumberBars::selectSecondary(int newSelect)
 
 
 
+// Bar methods
+
+bool NumberBars::fitToScreen()
+{
+	if (amount <= screen->w / 4)						// Minimum of 4 pixels wide
+	{
+		log("Fitting bars to screen\n");
+
+		bar_width = screen->w / amount;					// Width of bar in pixels
+		on_screen = amount;								// All bars are displayed on screen
+		offset = (screen->w - bar_width*amount) / 2;	// Center the bars on screen
+	}
+	else
+	{
+		log("Could not fit bars to screen\n");
+		return false;
+	}
+}
+
+
+
+
+
+
 
 void NumberBars::getInitBarWidth()
 {
 
-	if (amount<=(screen->w)/4) 			// If less than 80
-	{									// Fit bars to the screen
-		bar_width = screen->w/amount;
-		on_screen = amount;
-	} else {
-		bar_width = 4;
-		on_screen = screen->w/4;
+	if (!fitToScreen())					// Attempt to fit the bars to the screen
+	{
+		bar_width = 4;					// Otherwise make them default
+		on_screen = screen->w / 4;
+		offset = 0;
 	}
 
 	log("Bar width: %i\n", bar_width);
 	log("On screen: %i\n", on_screen);
+	log("Bar offset: %i\n", offset);
+
 }
 
 
@@ -115,7 +205,7 @@ void NumberBars::draw()
 	{
 
 		bar.h = (200*numbers[i])/max;
-		bar.x = bar_width*i;
+		bar.x = (bar_width*i)+offset;
 		bar.y = (screen->h) - (bar.h);
 
 		if (!(i%2))
@@ -125,30 +215,4 @@ void NumberBars::draw()
 			SDL_FillRect(screen, &bar, color_alternate);
 		}
 	}
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,7 +3,7 @@
 
 
 #include <cstdio>
-#include<SDL/SDL.h>
+#include"SDL/SDL.h"
 
 
 #include"sdl_framerate.h"
@@ -22,8 +22,6 @@ SDL_Event event;
 
 
 
-
-// DRAWING ENDS HERE
 
 // Clean up SDL
 void clean_up()
@@ -60,10 +58,11 @@ bool init()
 	return true;
 }
 
-//int argc, char *argv[]
 
 
-int main( int argc, char *argv[]  ) {
+
+int main(int argc, char *argv[]) 
+{
 
 
 
@@ -76,8 +75,19 @@ int main( int argc, char *argv[]  ) {
 
     FrameRate fps_lock(15);
 
-    int numbers[] = {1,4,6,3,5,15,3,6,8,5,4};
-    NumberBars nb(screen, 11, numbers);
+	//int numbers[] = { 1, 4, 6, 3, 5, 15,};
+
+	const int numbers_amount = 81;
+	int numbers[numbers_amount];
+
+	for (int i = 0; i < numbers_amount; i++)
+	{
+		numbers[i] = i + 1;
+	}
+
+
+
+    NumberBars nb(screen, numbers_amount, numbers);
 
 
 	//LoadAnim loada(screen);

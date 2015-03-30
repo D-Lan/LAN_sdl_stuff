@@ -43,13 +43,14 @@ class NumberBars
 		//int zoom;						//
 		//int left;						// Lowest array item shown
 		//int right;					// Highest array item shown
-		int scroll;						// Amount of offset to the right
+		int scroll;						// Amount of offset to the right in bars
+		int offset;						// Amount to offsent in pixels
 		int on_screen;					// Amount of bars on screen
 
 
 		// Bar methods
 		void getInitBarWidth();			// Set initial bar width
-
+		bool fitToScreen();				// Fit the bars to the screen
 
 
 		public:
@@ -70,7 +71,11 @@ class NumberBars
 			bool selectPrimary(int newSelect);
 			bool selectSecondary(int newSelect);
 
+			bool incrementPrimary();
+			bool decrementPrimary();
 
+			bool incrementSecondary();
+			bool decrementSecondary();
 
 };
 
