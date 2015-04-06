@@ -121,10 +121,10 @@ int main(int argc, char *argv[])
 						{
 							case SDLK_ESCAPE: done=true;
 							case SDLK_SPACE: done=true;
-							case SDLK_RIGHT: nb.scrollRight(5); break;
-							case SDLK_LEFT: nb.scrollLeft(5); break;
-							case SDLK_UP: nb.zoomIn(); break;
-							case SDLK_DOWN: nb.zoomOut(); break;
+							//case SDLK_RIGHT: nb.scrollRight(5); break;
+							//case SDLK_LEFT: nb.scrollLeft(5); break;
+							//case SDLK_UP: nb.zoomIn(); break;
+							case SDLK_DOWN: nb.dummy_draw(); break;
 
 							//case SDL_VIDEORESIZE: nb.getInitBarWidth(); break;
 							default: break;
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 		// draw background
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,20, 255));
         //loada.draw();
-        nb.draw();
+        //nb.dummy_draw();
 
 
         // DRAWING ENDS HERE
