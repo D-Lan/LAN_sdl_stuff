@@ -3,16 +3,16 @@
 
 
 #include <cstdio>
-#include"SDL/SDL.h"
+#include<SDL/SDL.h>
+#include<math.h>
 
 
 #include"sdl_framerate.h"
-#include"lan_logging.h"
+//#include"lan_logging.h"
 
-
-//#include"ui_loadanim.h"
+#include"ui_loadanim.h"
 #include"ui_numberbar.h"
-
+#include"ui_graph.h"
 
 
 
@@ -23,10 +23,12 @@ SDL_Event event;
 
 
 
+// DRAWING ENDS HERE
+
 // Clean up SDL
 void clean_up()
 {
-	log("Stopping SDL\n");
+	//log("Stopping SDL\n");
 	SDL_Quit(); // Stop SDL
 
 }
@@ -35,25 +37,23 @@ void clean_up()
 bool init()
 {
 
-    log("Initalizing SDL subsytem\n");
+    //log("Initalizing SDL subsytem\n");
 
 	// Initialize SDL subsystems
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
-        log( "\nUnable to init SDL: %s\n", SDL_GetError() );
+        //log( "\nUnable to init SDL: %s\n", SDL_GetError() );
         return false;
     }
 
 	// Set up the screen
-	screen = SDL_SetVideoMode(320, 240, 16, SDL_HWSURFACE);
+	screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE);
 
 	if( !screen )
 	{
-		log("\nUnable to set 320x240 video: %s\n", SDL_GetError());
+		//log("\nUnable to set video mode: %s\n", SDL_GetError());
 		return false;
 	}
-
-	SDL_WM_SetCaption("Sort Test", NULL);
 
 	// Make sure SDL cleans up before exit
     //atexit(clean_up);
@@ -62,37 +62,39 @@ bool init()
 
 
 
-
-int main(int argc, char *argv[]) 
+float testFunct(float x)
 {
+	//printf("Data: %f\n", x);
+	return sin(x)*4;
+}
 
+//int argc, char *argv[]	Required in windows. Doesn't do anything in Lunux.
+
+int main(int argc, char *argv[]) {
 
 
 	if ( init() == false )
 	{
-		log("Error initializing SDL");
+		//log("Error initializing SDL");
 		return 1;
 	}
 
 
+
+	
+	// INITIALIZE OBJECTS HERE
+
+
     FrameRate fps_lock(15);
 
-	//int numbers[] = { 1, 4, 6, 3, 5, 15,};
-
-	const int numbers_amount = 101;
-	int numbers[numbers_amount];
-
-	for (int i = 0; i < numbers_amount; i++)
-	{
-		numbers[i] = rand() % 100 + 1;
-	}
+    Graph g(screen, testFunct);
+    //log("Main screen width: %i\n", screen->w);
+    g.draw();
 
 
+	// END INITIALIZING OBJECTS
 
-    NumberBars nb(screen, numbers_amount, numbers);
 
-
-	//LoadAnim loada(screen);
 
 
 
@@ -121,12 +123,6 @@ int main(int argc, char *argv[])
 						{
 							case SDLK_ESCAPE: done=true;
 							case SDLK_SPACE: done=true;
-							//case SDLK_RIGHT: nb.scrollRight(5); break;
-							//case SDLK_LEFT: nb.scrollLeft(5); break;
-							//case SDLK_UP: nb.zoomIn(); break;
-							case SDLK_DOWN: nb.dummy_draw(); break;
-
-							//case SDL_VIDEORESIZE: nb.getInitBarWidth(); break;
 							default: break;
 						}
 
@@ -139,10 +135,7 @@ int main(int argc, char *argv[])
 
 
 		// draw background
-        SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,20, 255));
-        //loada.draw();
-        //nb.dummy_draw();
-
+        //SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,20, 255));
 
         // DRAWING ENDS HERE
         SDL_Flip(screen);
@@ -152,6 +145,6 @@ int main(int argc, char *argv[])
 
     // all is well
 	clean_up();
-	log("Sort exited cleanly\n");
+	//log("Sort exited cleanly\n");
     return 0;
 }
