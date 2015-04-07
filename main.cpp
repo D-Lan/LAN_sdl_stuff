@@ -21,7 +21,7 @@ SDL_Surface *screen = NULL;
 SDL_Event event;
 
 
-
+float pi = 3.14159265359;
 
 // DRAWING ENDS HERE
 
@@ -47,7 +47,7 @@ bool init()
     }
 
 	// Set up the screen
-	screen = SDL_SetVideoMode(320, 240, 32, SDL_HWSURFACE);
+	screen = SDL_SetVideoMode(640, 480, 32, SDL_HWSURFACE);
 
 	if( !screen )
 	{
@@ -65,7 +65,7 @@ bool init()
 float testFunct(float x)
 {
 	//printf("Data: %f\n", x);
-	return sin(x)*4;
+	return sin(x*pi);
 }
 
 //int argc, char *argv[]	Required in windows. Doesn't do anything in Lunux.
@@ -81,15 +81,15 @@ int main(int argc, char *argv[]) {
 
 
 
-	
+
 	// INITIALIZE OBJECTS HERE
 
 
-    FrameRate fps_lock(15);
+    FrameRate fps_lock(5);
 
     Graph g(screen, testFunct);
     //log("Main screen width: %i\n", screen->w);
-    g.draw();
+    g.dummyDraw();
 
 
 	// END INITIALIZING OBJECTS
@@ -121,8 +121,15 @@ int main(int argc, char *argv[]) {
                 {
 					switch (event.key.keysym.sym)
 						{
-							case SDLK_ESCAPE: done=true;
-							case SDLK_SPACE: done=true;
+							case SDLK_ESCAPE: done=true; break;
+							case SDLK_SPACE: done=true; break;
+
+							case SDLK_RIGHT: g.camera.position_x += 10; break;
+							case SDLK_LEFT: g.camera.position_x += -10; break;
+
+							case SDLK_UP: g.camera.position_y += 10; break;
+							case SDLK_DOWN: g.camera.position_y += -10; break;
+
 							default: break;
 						}
 
@@ -132,10 +139,13 @@ int main(int argc, char *argv[]) {
         } // end of message processing
 
         // DRAWING STARTS HERE
+        SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,0, 0));
 
 
-		// draw background
-        //SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,20, 255));
+        //g.draw();
+        g.dummyDraw();
+		//draw background
+
 
         // DRAWING ENDS HERE
         SDL_Flip(screen);

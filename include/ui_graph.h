@@ -13,7 +13,7 @@ class CoordCamera
 
 
 
-       
+
         int position_z;     // Zoom
 
         float scale;
@@ -41,6 +41,7 @@ class CoordCamera
         float getWorldCoord_y(int y);
 
 		int getViewCoord_y(float y);
+        int getViewCoord_x(float x);
 
         void test();
 
@@ -62,7 +63,7 @@ class Graph
         float (*funct)(float input);
 
         void draw();
-
+        void dummyDraw();
 };
 
 
