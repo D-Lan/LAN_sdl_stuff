@@ -10,45 +10,33 @@ class CoordCamera
 {
     private:
 
+		
 
-
-
-
-        int position_z;     // Zoom
-
-        float scale;
+		
 
     public:
+
+		SDL_Surface *screen;
 
 
         int position_x;
 		int position_y;
+		float scale_x;
+		float scale_y;
 
         CoordCamera();
-        CoordCamera(SDL_Surface *newScreen);
-
-        SDL_Surface *screen;
-
+        
         void zoomIn();
         void zoomOut();
-
         void moveUp();
         void moveDown();
         void moveLeft();
         void moveRight();
 
 
-        float getWorldCoord_x(int x);
-        float getWorldCoord_y(int y);
-
-		int getViewCoord_y(float y);
-        int getViewCoord_x(float x);
-        void test();
-
-
-
 		float screenToWorld_x(int x);
 		float screenToWorld_y(int y);
+
 
 		int  worldToScreen_x(float x);
 		int  worldToScreen_y(float y);
@@ -74,7 +62,9 @@ class Graph
         float (*funct)(float input);
 
         void draw();
-        void dummyDraw();
+
+
+		void test_Coord_conversion();
 };
 
 

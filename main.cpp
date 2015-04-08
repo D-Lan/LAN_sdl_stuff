@@ -21,7 +21,9 @@ SDL_Surface *screen = NULL;
 SDL_Event event;
 
 
-float pi = 3.14159265359;
+float pi = 3.141593;
+
+
 
 // DRAWING ENDS HERE
 
@@ -36,7 +38,6 @@ void clean_up()
 
 bool init()
 {
-
     //log("Initalizing SDL subsytem\n");
 
 	// Initialize SDL subsystems
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]) {
 
     Graph g(screen, testFunct);
     //log("Main screen width: %i\n", screen->w);
-    g.dummyDraw();
+
 
 
 	// END INITIALIZING OBJECTS
@@ -129,6 +130,9 @@ int main(int argc, char *argv[]) {
 
 							case SDLK_UP: g.camera.position_y += 10; break;
 							case SDLK_DOWN: g.camera.position_y += -10; break;
+
+							case SDLK_q: g.camera.scale_x++; g.camera.scale_y++; break;
+							case SDLK_w: g.camera.scale_x--; g.camera.scale_y--; break;
 
 							default: break;
 						}
