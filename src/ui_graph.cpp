@@ -127,6 +127,7 @@ Graph::Graph(SDL_Surface* newScreen,  float (&newFunct)(float x) )
 
 void Graph::dummyDraw()
 {
+	/*
     //int x = camera.getViewCoord_x(0);
     int y = camera.getViewCoord_y(0);
 
@@ -137,7 +138,47 @@ void Graph::dummyDraw()
     {
         put_pixel(screen, camera.getViewCoord_x(x), y, 255,255,255);
     }
+	*/
 
+}
+
+
+
+
+
+
+float CoordCamera::screenToWorld_x(int x)
+{
+	float center = (screen->w / 2) - position_x;
+	float t = (((x - center)) * 2) / screen->w;
+	return t;
+}
+
+
+float CoordCamera::screenToWorld_y(int y)
+{
+	float center = (screen->h / 2) + position_y;
+	float t = ((-y + center) * 2) / screen->h;
+	return t;
+}
+
+
+
+
+int CoordCamera::worldToScreen_x(float x)
+{
+	float center = (screen->w / 2) - position_x;
+	float t = ((x * screen->w) / 2) + center;
+	return t;
+}
+
+
+int CoordCamera::worldToScreen_y(float y)
+{
+	float center = (screen->h / 2) + position_y;
+
+	float t = ((-y * screen->h) / 2) + center;
+	return t;
 }
 
 
@@ -148,54 +189,57 @@ void Graph::dummyDraw()
 void Graph::draw()
 {
 
+	/*
+	//TEST COORD CONVERSION
+	camera.position_x = 100;
+	camera.position_y = 100;
+
+	int screen_point_x = 0;
+	int screen_point_y = 0;
+
+	float world_x = camera.screenToWorld_x(screen_point_x);
+	float world_y = camera.screenToWorld_y(screen_point_y);
+
+
+	int screen_x = camera.worldToScreen_x(world_x);
+	int screen_y = camera.worldToScreen_y(world_y);
+	*/
+
+	
     for (int x=0; x<screen->w ; x++)		// Draw function
     {
 
-		float y = funct( camera.getWorldCoord_x(x) );
+		float y = funct( camera.screenToWorld_x(x) );
 
-		//log("Conv: %f\n", camera.getWorldCoord_x(x));
-
-		//log("X: %i\nY: %i\n", x, y);
-		if ( x<screen->w && x>0 && camera.getViewCoord_y(y)<screen->h && camera.getViewCoord_y(y)>0)
+		if ( x<screen->w && x>0 && camera.worldToScreen_y(y)<screen->h && camera.worldToScreen_y(y)>0)
 		{
-            put_pixel(screen, x, camera.getViewCoord_y(y) , 255, 255, 255);
-            //log("X: %i\nY: %f\n", x, y);
-            //SDL_Delay(1);
-            //SDL_Flip(screen);
+            put_pixel(screen, x, camera.worldToScreen_y(y) , 255, 255, 255);
         }
     }
+	
 
-    //put_pixel(screen, x, y, 0,255,0);
 
-    int x = camera.getWorldCoord_x(0);
-    //int x = 0;
+    int x = camera.worldToScreen_x(0);
 
     if ( x>0 && x<screen->w)		// Draw Vertical axis line (x=0)
     {
 		for (int y = 0; y < screen->h; y++)
         {
-            //log("X: %i\nY: %i\n",x,y);
             put_pixel(screen, x, y ,0,255,0);
         }
     }
 
 
-	int y = camera.getWorldCoord_y(0);
-    //int y = 0;
+	int y = camera.worldToScreen_y(0);
 
 	if (y>0 && y<screen->h)			// Draw Horizontal axis line (y=0)
 	{
 		for (int x = 0; x<screen->w; x++)
 		{
-			//log("X: %i\nY: %i\n", x, y);
 			put_pixel(screen, x, y, 255, 0, 0);
 		}
 	}
-
-	//put_pixel(screen, camera.getWorldCoord_x(x), 200, 255, 255,255);
-
-    //put_pixel(screen, 160, 120, 255,255,255);
-    //put_pixel(screen, 160, 120, 255,255,255);
+	
 
 
 }

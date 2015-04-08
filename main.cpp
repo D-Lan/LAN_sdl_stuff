@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 	// INITIALIZE OBJECTS HERE
 
 
-    FrameRate fps_lock(5);
+    FrameRate fps_lock(15);
 
     Graph g(screen, testFunct);
     //log("Main screen width: %i\n", screen->w);
@@ -142,8 +142,8 @@ int main(int argc, char *argv[]) {
         SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,0, 0));
 
 
-        //g.draw();
-        g.dummyDraw();
+        g.draw();
+        //g.dummyDraw();
 		//draw background
 
 

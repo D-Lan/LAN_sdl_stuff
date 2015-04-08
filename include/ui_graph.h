@@ -37,13 +37,24 @@ class CoordCamera
         void moveLeft();
         void moveRight();
 
+
         float getWorldCoord_x(int x);
         float getWorldCoord_y(int y);
 
 		int getViewCoord_y(float y);
         int getViewCoord_x(float x);
-
         void test();
+
+
+
+		float screenToWorld_x(int x);
+		float screenToWorld_y(int y);
+
+		int  worldToScreen_x(float x);
+		int  worldToScreen_y(float y);
+
+
+
 
 };
 
