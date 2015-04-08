@@ -1,8 +1,4 @@
 
-
-
-
-#include<SDL/SDL.h>
 #include"ui_loadanim.h"
 
 
@@ -39,8 +35,6 @@ LoadAnim::LoadAnim(SDL_Surface* newScreen)
 
 
 }
-
-
 
 
 void LoadAnim::draw()
@@ -97,11 +91,3 @@ void LoadAnim::draw()
 		}
 	}
 }
-
-
-
-
-
-
-
-
