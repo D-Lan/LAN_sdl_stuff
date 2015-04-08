@@ -1,17 +1,15 @@
 
-#define DEBUG
-
-
 #include"ui_graph.h"
-#include<SDL/SDL.h>
-#include"lan_logging.h"
 
 
 void put_pixel(SDL_Surface* screen,int x,int y, int r, int g, int b)
 {
-  Uint32* p_screen = (Uint32*)screen->pixels;
-  p_screen += y*screen->w+x;
-  *p_screen = SDL_MapRGB(screen->format, r, g, b);
+    if (x<screen->w && x>=0 && y<screen->h && y>=0)
+    {
+        Uint32* p_screen = (Uint32*)screen->pixels;
+        p_screen += y*screen->w+x;
+        *p_screen = SDL_MapRGB(screen->format, r, g, b);
+    }
 }
 
 
@@ -35,7 +33,6 @@ Graph::Graph(SDL_Surface* newScreen,  float (&newFunct)(float x) )
 }
 
 
-
 float CoordCamera::screenToWorld_x(int x)
 {
 	float center = (screen->w / 2) - position_x;
@@ -50,8 +47,6 @@ float CoordCamera::screenToWorld_y(int y)
 	float t = ((-y + center) * scale_y) / screen->h;
 	return t;
 }
-
-
 
 
 int CoordCamera::worldToScreen_x(float x)
@@ -74,25 +69,17 @@ int CoordCamera::worldToScreen_y(float y)
 void Graph::draw()
 {
 
-	
-
-	
-    for (int x=0; x<screen->w ; x++)		// Draw function
+	//Draw the function
+    for (int x=0; x<screen->w ; x++)
     {
-
 		float y = funct( camera.screenToWorld_x(x) );
 
-		if ( x<screen->w && x>0 && camera.worldToScreen_y(y)<screen->h && camera.worldToScreen_y(y)>0)
-		{
-            put_pixel(screen, x, camera.worldToScreen_y(y) , 255, 255, 255);
-        }
+        put_pixel(screen, x, camera.worldToScreen_y(y) , 255, 255, 255);
     }
-	
 
-
+    // Draw Vertical axis line (x=0)
     int x = camera.worldToScreen_x(0);
-
-    if ( x>0 && x<screen->w)		// Draw Vertical axis line (x=0)
+    if ( x>0 && x<screen->w)
     {
 		for (int y = 0; y < screen->h; y++)
         {
@@ -100,24 +87,19 @@ void Graph::draw()
         }
     }
 
-
+    // Draw Horizontal axis line (y=0)
 	int y = camera.worldToScreen_y(0);
-
-	if (y>0 && y<screen->h)			// Draw Horizontal axis line (y=0)
+	if (y>0 && y<screen->h)
 	{
 		for (int x = 0; x<screen->w; x++)
 		{
 			put_pixel(screen, x, y, 255, 0, 0);
 		}
 	}
-	
-
-
 }
 
 
-
-
+/*
 void Graph::test_Coord_conversion()
 {
 	camera.position_x = 100;
@@ -129,7 +111,7 @@ void Graph::test_Coord_conversion()
 	float world_x = camera.screenToWorld_x(screen_point_x);
 	float world_y = camera.screenToWorld_y(screen_point_y);
 
-
 	int screen_x = camera.worldToScreen_x(world_x);
 	int screen_y = camera.worldToScreen_y(world_y);
 }
+*/
