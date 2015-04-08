@@ -4,7 +4,7 @@
 
 #include"ui_numberbar.h"
 
-#include <lan_logging.h>
+#include <d_logging.h>
 
 
 
@@ -76,7 +76,7 @@ void NumberBars::updateZoomLevels()
 	}
 
 
-	log("Zoom levels: %i, %i, %i, %i", zoom_level[0], zoom_level[1], zoom_level[2], zoom_level[3]);
+	d_log("Zoom levels: %i, %i, %i, %i", zoom_level[0], zoom_level[1], zoom_level[2], zoom_level[3]);
 }
 
 
@@ -98,7 +98,7 @@ void NumberBars::draw()
 		bar.x = (bar_width*i) + offset;
 		bar.y = (screen->h) - (bar.h);
 
-		if (select_primary == i+scroll)			
+		if (select_primary == i+scroll)
 		{
 			SDL_FillRect(screen, &bar, color_primary);		// If current bar is selected as primary
 		}
@@ -128,16 +128,16 @@ void NumberBars::dummy_draw()
 {
 
 
-	
-	//log("\n\n\n%i Numbers:\n", amount);
+
+	//d_log("\n\n\n%i Numbers:\n", amount);
 
 	//for (int i=0; i<amount; i++)
 	//{
 	//	printf("%i\n", numbers[i]);
 	//}
 
-	log("\nDummy Draw...\n");
-	log("Max: %i\nMin: %i\n", max, min);
-	log("Primary: %i\n", select_primary);
-	log("Secondary: %i\n\n", select_secondary);
+	d_log("\nDummy Draw...\n");
+	d_log("Max: %i\nMin: %i\n", max, min);
+	d_log("Primary: %i\n", select_primary);
+	d_log("Secondary: %i\n\n", select_secondary);
 }

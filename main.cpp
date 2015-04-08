@@ -8,7 +8,7 @@
 
 
 #include"sdl_framerate.h"
-//#include"lan_logging.h"
+#include"d_logging.h"
 
 #include"ui_loadanim.h"
 #include"ui_numberbar.h"
@@ -30,7 +30,7 @@ float pi = 3.141593;
 // Clean up SDL
 void clean_up()
 {
-	//log("Stopping SDL\n");
+	d_log("Stopping SDL\n");
 	SDL_Quit(); // Stop SDL
 
 }
@@ -38,12 +38,12 @@ void clean_up()
 
 bool init()
 {
-    //log("Initalizing SDL subsytem\n");
+    d_log("Initalizing SDL subsytem\n");
 
 	// Initialize SDL subsystems
 	if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )
     {
-        //log( "\nUnable to init SDL: %s\n", SDL_GetError() );
+        d_log( "\nUnable to init SDL: %s\n", SDL_GetError() );
         return false;
     }
 
@@ -52,7 +52,7 @@ bool init()
 
 	if( !screen )
 	{
-		//log("\nUnable to set video mode: %s\n", SDL_GetError());
+		d_log("\nUnable to set video mode: %s\n", SDL_GetError());
 		return false;
 	}
 
@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
 
 	if ( init() == false )
 	{
-		//log("Error initializing SDL");
+		d_log("Error initializing SDL");
 		return 1;
 	}
 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     FrameRate fps_lock(15);
 
     Graph g(screen, testFunct);
-    //log("Main screen width: %i\n", screen->w);
+    d_log("Main screen width: %i\n", screen->w);
 
 
 
@@ -159,6 +159,6 @@ int main(int argc, char *argv[]) {
 
     // all is well
 	clean_up();
-	//log("Sort exited cleanly\n");
+	d_log("Sort exited cleanly\n");
     return 0;
 }
