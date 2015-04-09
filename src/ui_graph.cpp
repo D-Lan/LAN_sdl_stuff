@@ -105,31 +105,29 @@ int CoordCamera::worldToScreen_y(float y)
 void Graph::draw()
 {
 
+
+	/*
+	//Draw the function OLD
+	for (int x = 0; x<screen->w; x++)
+	{
+		float y = funct(camera.screenToWorld_x(x));
+
+		put_pixel(screen, x, camera.worldToScreen_y(y), 0, 100, 100);
+	}
+	*/
+
     //myLine(screen, 100, 100, 150, 10);
 
-    for (int x=0; x<screen->w ;x++)
+	int stepSize = 8;
+
+    for (int x=0; x<screen->w ;x+=stepSize)
     {
+		float y = funct(camera.screenToWorld_x(x));
+		float y2 = funct(camera.screenToWorld_x(x+stepSize));
 
-
+		myLine(screen, x, camera.worldToScreen_y(y), x + stepSize , camera.worldToScreen_y(y2));
 
     }
-
-
-
-
-
-	//Draw the function OLD
-    for (int x=0; x<screen->w ;x++)
-    {
-		float y = funct( camera.screenToWorld_x(x) );
-
-        put_pixel(screen, x, camera.worldToScreen_y(y) , 0, 100, 100);
-    }
-
-
-
-
-
 
 
     // Draw Vertical axis line (x=0)
@@ -151,6 +149,7 @@ void Graph::draw()
 			put_pixel(screen, x, y, 255, 0, 0);
 		}
 	}
+
 }
 
 
