@@ -13,6 +13,42 @@ void put_pixel(SDL_Surface* screen,int x,int y, int r, int g, int b)
 }
 
 
+void myLine(SDL_Surface* surface, int x, int y, int x2, int y2) {
+	bool yLonger=false;
+	int incrementVal, endVal;
+	int shortLen=y2-y;
+	int longLen=x2-x;
+	if (abs(shortLen)>abs(longLen)) {
+		int swap=shortLen;
+		shortLen=longLen;
+		longLen=swap;
+		yLonger=true;
+	}
+	endVal=longLen;
+	if (longLen<0) {
+		incrementVal=-1;
+		longLen=-longLen;
+	} else incrementVal=1;
+	int decInc;
+	if (longLen==0) decInc=0;
+	else decInc = (shortLen << 16) / longLen;
+	int j=0;
+	if (yLonger) {
+		for (int i=0;i!=endVal;i+=incrementVal) {
+			put_pixel(surface,x+(j >> 16),y+i, 255, 255, 255);
+			j+=decInc;
+		}
+	} else {
+		for (int i=0;i!=endVal;i+=incrementVal) {
+			put_pixel(surface,x+i,y+(j >> 16), 255, 255, 255);
+			j+=decInc;
+		}
+	}
+
+
+}
+
+
 CoordCamera::CoordCamera()
 {
     position_x = 0;
@@ -69,13 +105,32 @@ int CoordCamera::worldToScreen_y(float y)
 void Graph::draw()
 {
 
-	//Draw the function
-    for (int x=0; x<screen->w ; x++)
+    //myLine(screen, 100, 100, 150, 10);
+
+    for (int x=0; x<screen->w ;x++)
+    {
+
+
+
+    }
+
+
+
+
+
+	//Draw the function OLD
+    for (int x=0; x<screen->w ;x++)
     {
 		float y = funct( camera.screenToWorld_x(x) );
 
-        put_pixel(screen, x, camera.worldToScreen_y(y) , 255, 255, 255);
+        put_pixel(screen, x, camera.worldToScreen_y(y) , 0, 100, 100);
     }
+
+
+
+
+
+
 
     // Draw Vertical axis line (x=0)
     int x = camera.worldToScreen_x(0);

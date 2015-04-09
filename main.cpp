@@ -10,11 +10,11 @@
 #include"sdl_framerate.h"
 #include"d_logging.h"
 
-#include"ui_loadanim.h"
-#include"ui_numberbar.h"
+//#include"ui_loadanim.h"
+//#include"ui_numberbar.h"
 #include"ui_graph.h"
 
-
+//#include<d_dft.h>
 
 // Global SDL things
 SDL_Surface *screen = NULL;
