@@ -22,20 +22,27 @@ void fft(CArray& x)
 	fft(even);
 	fft(odd);
 
-	printf("N: %i\n", N);
+	
 	// combine
 	for (size_t k = 0; k < N / 2; ++k)
 	{
 		
-		printf("--O: %f\n", odd[k]);
-		printf("--E: %f\n", even[k]);
-
-		//Complex t = std::polar(1.0, -2 * PI * k / N) * odd[k];
+		
+		Complex t = std::polar(1.0, -2 * PI * k / N) * odd[k];
 		//x[k] = even[k] + t;
 		//x[k + N / 2] = even[k] - t;
 	}
-	printf("\n");
+	
 }
+
+// Temporary print outputs
+/*
+printf("N: %i\n", N);
+printf("--O: %f\n", odd[k]);
+printf("--E: %f\n", even[k]);
+printf("\n");
+*/
+
 
 // inverse fft (in-place)
 void ifft(CArray& x)

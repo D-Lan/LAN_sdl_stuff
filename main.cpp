@@ -160,11 +160,6 @@ int Loop_SDL()
 
 // Assumes end > start
 // Assumes start & end are >0
-
-
-
-
-
 void d_fft(float* x, float* i, int start, int end, int stride)
 {
 	int length = ((end - start) / stride) + 1;
@@ -178,24 +173,28 @@ void d_fft(float* x, float* i, int start, int end, int stride)
 	
 	
 	
-	
+	// Get odd: (k * 2 + 1)*stride + start
+	// Get even: (k * 2)*stride + start
+
+
 
 	// Combine
-	//for (int k = 0; k < length; ++k)
-
 	printf("Sr: %i, St: %i\n", stride, start);
 	for (int k = 0; k < length / 2; ++k)
 	{
-		printf("++O: %f\n", x[(k * 2 + 1)*stride + start]);
-		printf("++E: %f\n", x[(k * 2)*stride + start]);
-		//printf("++E: %f\n", x[k] );
+		
+
+
+		// Poloar conversion std::polar( 1.0, -2 * PI * k/length) 
+
+		//_Rho * exp(i * _Theta)
 	}
 
 
 
 
-	printf("\n");
-	//printf("Length: %i\n", length);
+	
+
 }
 
 
@@ -211,6 +210,13 @@ printf("%f, ", x[i]);
 }
 printf("\n");
 
+// Show odd/even
+printf("++O: %f\n", x[(k * 2 + 1)*stride + start]);	// Odd
+printf("++E: %f\n", x[(k * 2)*stride + start]);		// Even
+
+
+printf("Length: %i\n", length);
+printf("\n");
 */
 
 
