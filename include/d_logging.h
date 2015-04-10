@@ -1,8 +1,8 @@
 
-#define DEBUG
+//#define DEBUG
 
-#ifndef LAN_LOGGING_H
-#define LAN_LOGGING_H
+#ifndef D_LOGGING_H
+#define D_LOGGING_H
 
 
 
@@ -15,4 +15,4 @@
 #   endif
 
 
-#endif // If LAN_LOGGING_H
+#endif

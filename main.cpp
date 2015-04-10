@@ -14,7 +14,8 @@
 //#include"ui_numberbar.h"
 #include"ui_graph.h"
 
-//#include<d_dft.h>
+
+
 
 // Global SDL things
 SDL_Surface *screen = NULL;
@@ -69,96 +70,176 @@ float testFunct(float x)
 	return sin(x*pi);
 }
 
-//int argc, char *argv[]	Required in windows. Doesn't do anything in Lunux.
-
-int main(int argc, char *argv[]) {
 
 
-	if ( init() == false )
+
+int Loop_SDL()
+{
+
+	if (init() == false)
 	{
 		d_log("Error initializing SDL");
 		return 1;
 	}
 
 
-
-
 	// INITIALIZE OBJECTS HERE
 
 
-    FrameRate fps_lock(15);
+	FrameRate fps_lock(15);
 
-    Graph g(screen, testFunct);
-    d_log("Main screen width: %i\n", screen->w);
-
-
+	Graph g(screen, testFunct);
+	d_log("Main screen width: %i\n", screen->w);
 
 	// END INITIALIZING OBJECTS
 
 
+	// program main loop
+	bool done = false;
+	while (!done)
+	{
+
+		// message processing loop
+
+		fps_lock.start();
+		while (SDL_PollEvent(&event))
+		{
+			// check for messages
+			switch (event.type)
+			{
+				// exit if the window is closed
+			case SDL_QUIT:
+				done = true;
+				break;
+
+				// check for keypresses
+			case SDL_KEYDOWN:
+			{
+				switch (event.key.keysym.sym)
+				{
+				case SDLK_ESCAPE: done = true; break;
+				case SDLK_SPACE: done = true; break;
+
+				case SDLK_RIGHT: g.camera.position_x += 10; break;
+				case SDLK_LEFT: g.camera.position_x += -10; break;
+
+				case SDLK_UP: g.camera.position_y += 10; break;
+				case SDLK_DOWN: g.camera.position_y += -10; break;
+
+				case SDLK_q: g.camera.scale_x++; g.camera.scale_y++; break;
+				case SDLK_w: g.camera.scale_x--; g.camera.scale_y--; break;
+
+				default: break;
+				}
+
+				break;
+			}
+			} // end switch
+		} // end of message processing
+
+		// DRAWING STARTS HERE
+		SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
 
 
-
-    // program main loop
-    bool done = false;
-    while (!done)
-    {
-
-        // message processing loop
-
-        fps_lock.start();
-        while (SDL_PollEvent(&event))
-        {
-            // check for messages
-            switch (event.type)
-            {
-                // exit if the window is closed
-            case SDL_QUIT:
-                done = true;
-                break;
-
-                // check for keypresses
-            case SDL_KEYDOWN:
-                {
-					switch (event.key.keysym.sym)
-						{
-							case SDLK_ESCAPE: done=true; break;
-							case SDLK_SPACE: done=true; break;
-
-							case SDLK_RIGHT: g.camera.position_x += 10; break;
-							case SDLK_LEFT: g.camera.position_x += -10; break;
-
-							case SDLK_UP: g.camera.position_y += 10; break;
-							case SDLK_DOWN: g.camera.position_y += -10; break;
-
-							case SDLK_q: g.camera.scale_x++; g.camera.scale_y++; break;
-							case SDLK_w: g.camera.scale_x--; g.camera.scale_y--; break;
-
-							default: break;
-						}
-
-                    break;
-                }
-            } // end switch
-        } // end of message processing
-
-        // DRAWING STARTS HERE
-        SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0,0, 0));
-
-
-        g.draw();
-        //g.dummyDraw();
+		g.draw();
+		//g.dummyDraw();
 		//draw background
 
 
-        // DRAWING ENDS HERE
-        SDL_Flip(screen);
-        fps_lock.stop();
+		// DRAWING ENDS HERE
+		SDL_Flip(screen);
+		fps_lock.stop();
 
-    } // end main loop
+	} // end main loop
 
-    // all is well
+	// all is well
 	clean_up();
-	d_log("Sort exited cleanly\n");
+
+}
+
+
+// Assumes end > start
+// Assumes start & end are >0
+
+
+
+
+
+void d_fft(float* x, float* i, int start, int end, int stride)
+{
+	int length = ((end - start) / stride) + 1;
+
+	if ( length <= 1) return;
+
+	
+	// Divide and conquer
+	d_fft(x, i, start, end - stride, stride * 2);	// Even
+	d_fft(x, i, start + stride, end, stride * 2);	// Odd
+	
+	
+	
+	
+
+	// Combine
+	//for (int k = 0; k < length; ++k)
+
+	printf("Sr: %i, St: %i\n", stride, start);
+	for (int k = 0; k < length / 2; ++k)
+	{
+		printf("++O: %f\n", x[(k * 2 + 1)*stride + start]);
+		printf("++E: %f\n", x[(k * 2)*stride + start]);
+		//printf("++E: %f\n", x[k] );
+	}
+
+
+
+
+	printf("\n");
+	//printf("Length: %i\n", length);
+}
+
+
+
+
+/*
+
+
+// Show values in use
+for (int i = start; i < end; i += stride)
+{
+printf("%f, ", x[i]);
+}
+printf("\n");
+
+*/
+
+
+
+
+#include<d_fft.h>
+
+
+int main(int argc, char *argv[])	//int argc, char *argv[]	Required in windows. Doesn't do anything in Lunux.
+{
+	d_log("Running FFT test...\n");
+	
+
+	const int Samples = 8;
+
+	//float x[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0 };
+	float x[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0 };
+	float i[8];
+
+
+	//d_fft(x, i, 0, (Samples-1), 1);
+
+	
+	TESTfft();
+
+
+
+	
+
+	d_log("Done!\n");
     return 0;
 }
